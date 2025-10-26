@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Архивы Времени: Юрий Попов</title>
+    <!-- Загрузка Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Настройка шрифтов: Inter для заголовков и Serifs для газетного текста -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Georgia', 'Times New Roman', 'serif'], // Газетный шрифт
+                    },
+                    colors: {
+                        'paper': '#f4f0e6', // Цвет старой бумаги
+                        'ink': '#1e1e1e',   // Цвет чернил
+                        'accent-sepia': '#a8715a', // Сепия-акцент
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Стиль для имитации газетного текста */
+        .newspaper-content {
+            column-count: 1;
+            column-gap: 2.5rem;
+            text-align: justify;
+            hyphens: auto;
+            line-height: 1.6;
+        }
+        /* Медиа-запросы для колонок (адаптивность) */
+        @media (min-width: 640px) { /* sm и выше - только две колонки */
+            .newspaper-content {
+                column-count: 2;
+            }
+        }
+        /* Разделитель между колонками */
+        .column-divider {
+             column-rule: 1px solid rgba(30, 30, 30, 0.2);
+        }
+
+        /* Стиль для принудительного переноса на новую колонку */
+        .new-column {
+            break-before: column;
+        }
+
+        /* --- Стили для фонового изображения и оверлея --- */
+        .header-bg {
+            background-image: url('https://avatars.mds.yandex.net/i?id=3ba1355cfc555dce3dc0774989f6e2ec52e07b8f-8318446-images-thumbs&n=13');
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: multiply; 
+            color: white; 
+        }
+
+        /* Добавление полупрозрачного темного оверлея для читаемости текста */
+        .header-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.4); 
+            border-radius: 0.75rem; 
+            z-index: 10;
+        }
+        
+        /* Убеждаемся, что контент шапки находится поверх оверлея */
+        .header-content > * {
+            position: relative;
+            z-index: 20;
+        }
+        /* ------------------------------------------- */
+
+        /* --- Стили для эффекта Печатающей Машинки (для имени) --- */
+        #popov-name {
+            /* Добавляем мигающий курсор с правой стороны */
+            border-right: 0.15em solid #a8715a;
+            white-space: nowrap; 
+            overflow: hidden; 
+        }
+        
+        /* Анимация мигания курсора */
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #a8715a; }
+        }
+        /* ------------------------------------------- */
+
+        /* --- Новые стили для анимаций появления --- */
+        /* Анимация появления основного блока (Fade In Up) */
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Анимация плавного появления заголовков (Fade In Slow) */
+        .fade-in-slow {
+            animation: fadeInSlow 1s ease-out forwards;
+        }
+
+        @keyframes fadeInSlow {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        /* ------------------------------------------- */
+    </style>
+</head>
+<body class="bg-gray-100 font-sans text-ink">
+
+    <div class="max-w-5xl mx-auto p-4 sm:p-8 lg:p-12">
+
+        <!-- Современная Шапка Газеты (2025 Design) с фоном и оверлеем -->
+        <header class="mb-8 border-b-4 border-accent-sepia pb-4 shadow-lg rounded-xl p-6 relative header-bg">
+            <div class="header-content">
+                <p class="text-sm font-light text-right text-gray-200 mb-1">
+                    Воскресенье, 26 октября 2025 г. | Выпуск № 731
+                </p>
+                <h1 class="text-6xl sm:text-7xl font-extrabold tracking-tight leading-none text-center text-white">
+                    <span class="text-accent-sepia">АРХИВЫ</span> ВРЕМЕНИ
+                </h1>
+                <h2 class="text-xl sm:text-2xl text-center font-normal mt-2 text-gray-300">
+                    Ежедневное Издание о Наследии Центральной Азии
+                </h2>
+            </div>
+        </header>
+
+        <!-- Основной Контейнер Статьи - Добавлены классы для начального состояния анимации -->
+        <main id="main-content" class="bg-paper p-6 sm:p-10 rounded-xl shadow-2xl border border-gray-300 opacity-0 translate-y-4">
+
+            <!-- Заголовок Статьи с элементом для анимации -->
+            <h3 class="text-4xl sm:text-5xl font-serif font-bold mb-4 leading-tight text-center border-b-2 border-ink pb-2">
+                Великий Летописец Степи: <span id="popov-name"></span>
+            </h3>
+            <div class="text-lg text-center font-serif italic mb-6 text-gray-700">
+                Ключевые факты о жизни карагандинского краеведа (1947 г.р.)
+            </div>
+
+            <!-- Изображение и Лид-Абзац (Вводная часть, не в колонках) -->
+            <div class="mb-8 flex flex-col lg:flex-row gap-6">
+                <div class="lg:w-1/3 flex justify-center items-start">
+                    <!-- БЛОК ИЗОБРАЖЕНИЯ (ОСНОВНОЕ) -->
+                    <div class="">
+                        <div class="w-full max-w-xs lg:max-w-full aspect-square bg-gray-300 rounded-lg shadow-xl overflow-hidden border-4 border-accent-sepia/50">
+                            <!-- Изображение краеведа -->
+                            <img src="https://lh4.googleusercontent.com/proxy/eBbX6HwBU652bTJeMk0ZP1vau83P-mKE_Ypxk2Q8yaRISEDjORlcsYx7BPNfFjhRTFiz6F1qcIAmvF45gU0jfSjmXkTJdg7lzNerMQ" 
+                                 alt="Портрет краеведа Юрия Попова"
+                                 class="w-full h-full object-cover"
+                                 onerror="this.onerror=null; this.src='https://placehold.co/400x400/dddddd/333333?text=Ошибка+загрузки+фото';"
+                            >
+                        </div>
+                    </div>
+                </div>
+                <!-- Абзац с восстановленным текстом (без анимации) - Добавлен ID для Параллакса -->
+                <p id="lead-paragraph" class="lg:w-2/3 text-lg font-serif mb-0 leading-relaxed font-semibold border-l-4 border-accent-sepia pl-4 italic text-ink/90">
+                    <!-- Буква Л для эффекта буквицы (Drop Cap) -->
+                    <span class="text-3xl float-left mr-2 font-serif text-accent-sepia">Л</span>
+                    егендарный карагандинский краевед Юрий Попов является маяком для тех, кто ищет корни истории. Его кропотливый труд по сбору и систематизации фактов о жизни шахтерской столицы и степей стал бесценным даром, заложив основу самосознания целого региона.
+                </p>
+            </div>
+
+
+            <!-- Основной Текст в Газетных Колонках (Адаптивный Layout) -->
+            <div class="newspaper-content column-divider font-serif text-base text-ink">
+
+                <!-- Раздел 1: Ранние Годы и Истоки Страсти -->
+                <p class="mb-4">
+                    <strong>Годы жизни:</strong> Родился в 1947 году. Всю свою жизнь посвятил сохранению истории Караганды, осознав, что стремительное развитие региона стирает детали уходящей эпохи.
+                </p>
+
+                <!-- Раздел 2: Кропотливая Исследовательская Работа -->
+                <!-- Добавлен класс section-heading и opacity-0 для анимации при скролле -->
+                <h4 class="text-2xl font-serif font-bold my-4 text-accent-sepia leading-snug section-heading opacity-0">
+                    Метод и Темы
+                </h4>
+                <p class="mb-4">
+                    <strong>Метод работы:</strong> Сбор "живых свидетельств" — прямое общение с первостроителями, ветеранами и жителями. Часами записывал интервью, собирал старые фотографии и письма.
+                </p>
+                
+                <p class="mb-4">
+                    <strong>Ключевые темы:</strong> Восстановление хронологии событий, истории первостроителей и ветеранов труда, а также сложные страницы истории региона, включая судьбы спецпереселенцев и заключенных <strong>КарЛАГа</strong>.
+                </p>
+
+                <!-- Раздел 3: Вклад в Культуру и Литературу -->
+                <!-- Добавлен класс section-heading и opacity-0 для анимации при скролле -->
+                <h4 class="text-2xl font-serif font-bold my-4 text-accent-sepia leading-snug new-column section-heading opacity-0">
+                    Наследие и Влияние
+                </h4>
+                <p class="mb-4">
+                    <strong>Литературные труды:</strong> Автор многочисленных публикаций, фундаментальных книг и альманахов, отличающихся точностью фактов и высоким литературным стилем.
+                </p>
+                <p class="mb-4">
+                    <strong>Архивы:</strong> Передал значительную часть своих уникальных архивов в Карагандинскую областную универсальную научную библиотеку для обеспечения их сохранности и доступности.
+                </p>
+
+                <!-- Раздел 4: Заключение -->
+                <!-- Добавлен класс section-heading и opacity-0 для анимации при скролле -->
+                <h4 class="text-2xl font-serif font-bold my-4 text-accent-sepia leading-snug section-heading opacity-0">
+                    Значение
+                </h4>
+                <p class="mb-4">
+                    Труды Юрия Попова являются <strong>ключевыми источниками</strong> по истории Карагандинской области. Его преданность делу сохранения памяти вдохновила новое поколение исследователей, а его работа стала эталоном краеведческих изысканий в Казахстане. Он оставался скромным тружеником, для которого главная награда — сохранение исторической правды.
+                </p>
+
+            </div>
+
+            <!-- Подвал Статьи -->
+            <footer class="mt-8 pt-4 border-t-2 border-accent-sepia/50 text-center text-sm text-gray-600 font-sans">
+                Материал подготовлен на основе архивных данных и исследований. Все права на сохранение исторического наследия защищены.
+            </footer>
+
+        </main>
+
+    </div>
+    
+    <script>
+        // Глобальные константы для текста
+        const NAME_TO_TYPE = 'Юрий Попов';
+        const TYPING_SPEED_NAME = 150; // Скорость для имени
+        
+        /**
+         * Функция для создания эффекта печатающей машинки.
+         */
+        function typeWriter(elementId, text, speed) {
+            const element = document.getElementById(elementId);
+            let i = 0;
+            
+            // Устанавливаем и запускаем анимацию курсора
+            element.style.borderRight = '0.15em solid #a8715a';
+            element.style.animation = 'blink-caret 0.75s step-end infinite';
+
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    // Останавливаем мигание курсора после завершения печати
+                    element.style.animation = 'blink-caret 0.75s step-end 3';
+                    setTimeout(() => {
+                        element.style.borderRight = 'none';
+                        element.style.animation = 'none';
+                    }, 2250);
+                }
+            }
+            type();
+        }
+
+        /**
+         * Управляет эффектом параллакса для вводного абзаца.
+         */
+        function handleParallax() {
+            const element = document.getElementById('lead-paragraph');
+            if (!element) return;
+
+            // Расчет смещения
+            const scrollPosition = window.pageYOffset;
+            // Скорость 5% от прокрутки (двигается медленнее)
+            const parallaxSpeed = 0.05; 
+            // Мы инвертируем смещение (делаем его положительным), чтобы элемент отставал
+            const yOffset = scrollPosition * parallaxSpeed; 
+            
+            // Применяем transform3d для аппаратного ускорения
+            element.style.transform = `translate3d(0, ${yOffset}px, 0)`;
+        }
+
+
+        /**
+         * Настраивает анимацию появления заголовков секций при прокрутке.
+         */
+        function setupScrollAnimations() {
+            // Выбираем все элементы с классом section-heading
+            const headings = document.querySelectorAll('.section-heading');
+
+            // Настройки Intersection Observer
+            const observerOptions = {
+                root: null, // Наблюдатель использует viewport
+                rootMargin: '0px',
+                threshold: 0.2 // Триггер, когда 20% элемента в поле зрения
+            };
+
+            const observerCallback = (entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Добавляем класс анимации
+                        entry.target.classList.add('fade-in-slow');
+                        // Прекращаем наблюдение после первого появления
+                        observer.unobserve(entry.target);
+                    }
+                });
+            };
+
+            const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+            // Начинаем наблюдение за каждым заголовком
+            headings.forEach(heading => {
+                observer.observe(heading);
+            });
+        }
+
+        // Запускаем все анимации при полной загрузке страницы
+        window.onload = function() {
+            // 1. Анимация печатания имени
+            typeWriter('popov-name', NAME_TO_TYPE, TYPING_SPEED_NAME);
+
+            // 2. Анимация появления основного контента
+            const mainContent = document.getElementById('main-content');
+            if (mainContent) {
+                // Задержка, чтобы анимация имени началась первой
+                setTimeout(() => {
+                    mainContent.classList.add('fade-in-up');
+                }, 300); 
+            }
+            
+            // 3. Параллакс эффект для вводного абзаца
+            window.addEventListener('scroll', handleParallax);
+            window.addEventListener('resize', handleParallax);
+            handleParallax(); // Вызываем один раз при загрузке для корректного позиционирования
+
+            // 4. Анимация при прокрутке (появление секций)
+            setupScrollAnimations();
+        };
+    </script>
+
+</body>
+</html>
