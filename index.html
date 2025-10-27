@@ -179,7 +179,13 @@
                     егендарный карагандинский краевед Юрий Попов является маяком для тех, кто ищет корни истории. Его кропотливый труд по сбору и систематизации фактов о жизни шахтерской столицы и степей стал бесценным даром, заложив основу самосознания целого региона.
                 </p>
             </div>
-
+            
+            <!-- Кнопка "Прочитать" для модального окна -->
+            <div class="text-center mt-6 mb-8">
+                <button id="read-more-btn" class="bg-accent-sepia hover:bg-[#94614d] text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-accent-sepia/50">
+                    Прочитать Дополнительные Материалы
+                </button>
+            </div>
 
             <!-- Основной Текст в Газетных Колонках (Адаптивный Layout) -->
             <div class="newspaper-content column-divider font-serif text-base text-ink">
@@ -231,12 +237,49 @@
         </main>
 
     </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО ДЛЯ ДОКУМЕНТОВ (Скрыто по умолчанию) -->
+    <div id="pdf-modal" class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden flex justify-center items-center p-4" onclick="closeModal()">
+        <div class="bg-paper p-8 rounded-lg shadow-2xl max-w-lg w-full transform transition-all duration-300" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-center border-b border-gray-200 pb-3 mb-4">
+                <h4 class="text-2xl font-serif font-bold text-ink">Дополнительные Архивы Ю. Попова</h4>
+                <button onclick="closeModal()" class="text-ink hover:text-accent-sepia text-3xl leading-none font-sans p-2 -mt-2 -mr-2 rounded-full hover:bg-gray-200 transition-colors">&times;</button>
+            </div>
+            
+            <p class="mb-6 text-base text-gray-700 font-sans text-center">
+                Здесь вы можете перейти к полному архиву документов, доступных на Google Диске.
+            </p>
+
+            <div class="text-center mb-6">
+                <a href="https://drive.google.com/drive/folders/1dVf2faPSt0U8PZ9vVgpPlJJqQlhW8p7t?usp=sharing" target="_blank" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105">
+                    Перейти к Материалам на Google Диске
+                </a>
+            </div>
+            <div class="mt-6 text-right">
+                 <button onclick="closeModal()" class="bg-gray-300 hover:bg-gray-400 text-ink font-bold py-2 px-4 rounded-full transition duration-200">
+                    Закрыть
+                </button>
+            </div>
+        </div>
+    </div>
     
     <script>
         // Глобальные константы для текста
         const NAME_TO_TYPE = 'Юрий Попов';
         const TYPING_SPEED_NAME = 150; // Скорость для имени
         
+        // --- Функции для Модального Окна ---
+        function openModal() {
+            document.getElementById('pdf-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Запретить прокрутку фона
+        }
+
+        function closeModal() {
+            document.getElementById('pdf-modal').classList.add('hidden');
+            document.body.style.overflow = ''; // Разрешить прокрутку фона
+        }
+        window.closeModal = closeModal; // Делаем доступной из HTML
+
         /**
          * Функция для создания эффекта печатающей машинки.
          */
@@ -326,21 +369,28 @@
             const mainContent = document.getElementById('main-content');
             if (mainContent) {
                 // Задержка, чтобы анимация имени началась первой
-                setTimeout(() => {
-                    mainContent.classList.add('fade-in-up');
-                }, 300); 
-            }
-            
-            // 3. Параллакс эффект для вводного абзаца
-            window.addEventListener('scroll', handleParallax);
-            window.addEventListener('resize', handleParallax);
-            handleParallax(); // Вызываем один раз при загрузке для корректного позиционирования
+                    setTimeout(() => {
+                        mainContent.classList.add('fade-in-up');
+                    }, 300); 
+                }
+                
+                // 3. Параллакс эффект для вводного абзаца
+                window.addEventListener('scroll', handleParallax);
+                window.addEventListener('resize', handleParallax);
+                handleParallax(); // Вызываем один раз при загрузке для корректного позиционирования
 
-            // 4. Анимация при прокрутке (появление секций)
-            setupScrollAnimations();
-        };
-    </script>
+                // 4. Анимация при прокрутке (появление секций)
+                setupScrollAnimations();
+                
+                // 5. Обработчики для модального окна
+                const readMoreBtn = document.getElementById('read-more-btn');
+                if (readMoreBtn) {
+                    readMoreBtn.addEventListener('click', openModal);
+                }
+            };
+        </script>
 
 </body>
 </html>
+
 
